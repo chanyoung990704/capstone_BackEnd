@@ -2,6 +2,9 @@ package unit.capstone.domain;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class Member {
 
@@ -18,6 +21,10 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private MemberAuthority authority;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<LikeMovies> likeMovies = new ArrayList<>();
+
 
     // 생성자 통한 Setter 기능
     // 기본 생성자 protected 생성 방지
@@ -57,4 +64,7 @@ public class Member {
         return authority;
     }
 
+    public List<LikeMovies> getLikeMovies() {
+        return likeMovies;
+    }
 }

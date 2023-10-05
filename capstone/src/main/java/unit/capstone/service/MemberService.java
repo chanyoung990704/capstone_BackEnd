@@ -3,7 +3,9 @@ package unit.capstone.service;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import unit.capstone.domain.LikeMovies;
 import unit.capstone.domain.Member;
+import unit.capstone.domain.Movie;
 import unit.capstone.exception.member.NotFoundMemberException;
 import unit.capstone.repository.member.MemberRepository;
 
@@ -58,10 +60,23 @@ public class MemberService {
         return member;
     }
 
+    // 영화 좋아요 기능 컨트롤러에서 Member 불러옴 -> Cascade 사용
+    public void movieLike(Member member, Movie movie) {
+
+
+        // 이미 좋아요로 저장된 영화라면 오류 호출
+        if(memberRepository.isSavedLikeMovie(member.getId(), movie.getId()))
+            throw new RuntimeException("이미 좋아요로 등록한 영화");
+        else
+            new LikeMovies(member, movie);
+
+    }
+
 
     private boolean isEmailTaken(String email) {
         return memberRepository.existsByEmail(email);
     }
+
 
 
 }
