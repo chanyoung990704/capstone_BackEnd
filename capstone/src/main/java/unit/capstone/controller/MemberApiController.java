@@ -53,7 +53,7 @@ public class MemberApiController {
 
 
 
-    // 접근 권한 설정
+    // 접근 권한 설정 (Test용)
 
     @GetMapping("/api/test")
     @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")

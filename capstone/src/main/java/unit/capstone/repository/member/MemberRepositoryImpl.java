@@ -13,30 +13,6 @@ import java.util.List;
 @Repository
 public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
-    private final EntityManager em;
-    private final JPAQueryFactory queryFactory;
-
-    public MemberRepositoryImpl(EntityManager em) {
-        this.em = em;
-        this.queryFactory = new JPAQueryFactory(em);
-    }
-
-    QLikeMovies likeMovies = QLikeMovies.likeMovies;
-
-    @Override
-    public boolean isSavedLikeMovie(Long memberId, Long movieId) {
-        JPAQuery<LikeMovies> query = queryFactory.selectFrom(likeMovies)
-                .where(likeMovies.member.id.eq(memberId).and(likeMovies.movie.id.eq(movieId)));
-
-        List<LikeMovies> result = query.fetch();
-
-        if(!result.isEmpty())
-            return true;
-        else
-            return false;
-
-
-    }
 
 
 }

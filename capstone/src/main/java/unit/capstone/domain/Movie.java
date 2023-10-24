@@ -16,9 +16,13 @@ public class Movie {
     @Column(columnDefinition = "text")
     private String title;
 
+    // 생성자 통한 Setter 기능
+    // 기본 생성자 protected 생성 방지
+    protected Movie() {
 
-    //getter
+    }
 
+    //Getter
     public Long getId() {
         return id;
     }

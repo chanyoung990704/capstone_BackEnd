@@ -67,4 +67,6 @@ public class Member {
     public List<LikeMovies> getLikeMovies() {
         return likeMovies;
     }
+
+
 }

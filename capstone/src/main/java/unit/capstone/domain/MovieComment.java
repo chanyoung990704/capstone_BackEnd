@@ -2,46 +2,41 @@ package unit.capstone.domain;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
-public class LikeMovies {
+public class MovieComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "like_movie_id")
+    @Column(name = "movie_comment_id")
     private Long id;
+    private String comment;
+    private LocalDateTime createDate;
 
-
+    // 반대쪽 위치에서 @OnetoMany를 사용할 것에 대한 당위성 체크
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
-    // 생성자 통한 Setter 기능
-    // 기본 생성자 protected 생성 방지
-    protected LikeMovies(){
+
+    protected MovieComment() {
 
     }
 
-    public LikeMovies(Member member, Movie movie) {
-        setMember(member);
+
+    public MovieComment(String comment, LocalDateTime createDate, Member member, Movie movie) {
+        this.comment = comment;
+        this.createDate = createDate;
+        this.member = member;
         this.movie = movie;
     }
 
-
-
-    //연관관계 세팅
-    public void setMember(Member member) {
-        this.member = member;
-        member.getLikeMovies().add(this);
-    }
-
     //Getter
-
-
     public Long getId() {
         return id;
     }
