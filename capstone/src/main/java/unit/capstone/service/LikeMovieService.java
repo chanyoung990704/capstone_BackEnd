@@ -12,7 +12,7 @@ import unit.capstone.repository.likemovie.LikeMovieRepository;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class MovieLikeService {
+public class LikeMovieService {
 
     private final MemberService memberService;
     private final MovieService movieService;

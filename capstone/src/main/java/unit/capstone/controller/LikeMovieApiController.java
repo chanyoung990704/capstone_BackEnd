@@ -7,31 +7,24 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import unit.capstone.domain.Member;
-import unit.capstone.domain.Movie;
-import unit.capstone.exception.member.NotFoundMemberException;
 import unit.capstone.exception.movie.DuplicateLikedMovieException;
 import unit.capstone.exception.movie.NotFoundMovieException;
-import unit.capstone.service.MemberService;
-import unit.capstone.service.MovieLikeService;
-import unit.capstone.service.MovieService;
-
-import java.util.Optional;
+import unit.capstone.service.LikeMovieService;
 
 @RestController
 @RequiredArgsConstructor
-public class MovieLikeApiController {
+public class LikeMovieApiController {
 
-    private final MovieLikeService movieLikeService;
+    private final LikeMovieService likeMovieService;
 
 
     // 영화 좋아요 눌렀을 시 작동
-    @PostMapping("/api/movie/{movieid}")
+    @PostMapping("/api/movie/like/{movieid}")
     public ResponseEntity<String> movieLike(Authentication authentication, @PathVariable Long movieid) {
 
         try {
             String email = authentication.getName();
-            movieLikeService.movieLike(email, movieid);
+            likeMovieService.movieLike(email, movieid);
             return ResponseEntity.ok("좋아요 등록 완료");
         } catch (NotFoundMovieException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
