@@ -7,7 +7,10 @@ import unit.capstone.domain.LikeMovies;
 import unit.capstone.domain.Member;
 import unit.capstone.domain.Movie;
 import unit.capstone.exception.movie.DuplicateLikedMovieException;
+import unit.capstone.exception.movie.NotFoundMovieLikeException;
 import unit.capstone.repository.likemovie.LikeMovieRepository;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +30,20 @@ public class LikeMovieService {
             Movie movie = movieService.findMovieById(movieId);
             new LikeMovies(member, movie);
         }
+    }
 
+    public void cancelMovieLike(String email, Long movieId) {
+        Member member = memberService.findMemberByEmail(email).get();
+        Optional<LikeMovies> byMemberIdAndMovieId
+                = likeMovieRepository.findByMemberIdAndMovieId(member.getId(), movieId);
+        if(!byMemberIdAndMovieId.isPresent())
+            throw new NotFoundMovieLikeException("좋아요 표시가 되지 않은 영화입니다.");
+        else{
+            LikeMovies likeMovies = byMemberIdAndMovieId.get();
+            likeMovies.removeMember(member);
+            likeMovieRepository.deleteByMemberIdAndMovieId(member.getId(), movieId);
+        }
 
     }
+
 }

@@ -26,7 +26,7 @@ public class MemberService {
 
     public Long registerMember(Member member) {
 
-        //검증 로직
+        //중복 이메일 검증 로직
         if (isEmailTaken(member.getEmail())) {
             throw new UsernameNotFoundException("This Email is Using....");
         }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import unit.capstone.exception.movie.DuplicateLikedMovieException;
 import unit.capstone.exception.movie.NotFoundMovieException;
+import unit.capstone.exception.movie.NotFoundMovieLikeException;
 import unit.capstone.service.LikeMovieService;
 
 @RestController
@@ -35,6 +36,20 @@ public class LikeMovieApiController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
 
+    }
+
+    // 영화 좋아요 취소 기능
+    @PostMapping("/api/movie/likecancel/{movieid}")
+    public ResponseEntity<String> cancelMovieLike(Authentication authentication, @PathVariable Long movieid) {
+        try {
+            String email = authentication.getName();
+            likeMovieService.cancelMovieLike(email, movieid);
+            return ResponseEntity.ok("좋아요 취소 완료");
+        } catch (NotFoundMovieLikeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 문제로 좋아요 취소가 되지 않았습니다.");
+        }
     }
 
 }

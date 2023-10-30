@@ -39,6 +39,10 @@ public class LikeMovies {
         member.getLikeMovies().add(this);
     }
 
+    public void removeMember(Member member) {
+        member.getLikeMovies().remove(this);
+    }
+
     //Getter
 
 
