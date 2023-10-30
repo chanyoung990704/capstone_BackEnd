@@ -34,7 +34,8 @@ public class MemberApiController {
     public ResponseEntity<String> registerMember(@RequestBody @Valid CreateMemberDTO createMemberDTO) {
 
         try {
-            Member member = new Member(createMemberDTO.getName(), passwordEncoder.encode(createMemberDTO.getPassword()), createMemberDTO.getEmail(), MemberAuthority.ROLE_USER);
+            Member member = new Member(createMemberDTO.getName(), passwordEncoder.encode(createMemberDTO.getPassword()),
+                    createMemberDTO.getEmail(), MemberAuthority.ROLE_USER);
             memberService.registerMember(member);
             return ResponseEntity.ok("회원가입 완료");
         } catch (UsernameNotFoundException e) {

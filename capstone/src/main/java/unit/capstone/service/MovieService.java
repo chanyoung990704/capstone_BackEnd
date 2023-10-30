@@ -2,6 +2,10 @@ package unit.capstone.service;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import unit.capstone.domain.Movie;
@@ -10,6 +14,7 @@ import unit.capstone.repository.movie.MovieRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -28,9 +33,15 @@ public class MovieService {
 
 
     // 검색어 자동 완성
+    @Cacheable(value = "autoCompleteCache", key = "#prefix")
     public List<Movie> autoComplete(String prefix) {
-        List<Movie> byKeywords = movieRepository.findByTitleStartsWith(prefix);
-        return byKeywords;
+        List<Movie> byTitleStartsWith = movieRepository.findByTitleStartsWith(prefix);
+
+        List<Movie> first10Movies = byTitleStartsWith.stream()
+                .limit(10)
+                .collect(Collectors.toList());
+
+        return first10Movies;
     }
 
 
