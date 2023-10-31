@@ -24,10 +24,11 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<LikeMovies> likeMovies = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<RecommendedMovie> recommendedMovies = new ArrayList<>();
 
     // 생성자 통한 Setter 기능
     // 기본 생성자 protected 생성 방지
-
     protected Member() {
 
     }
@@ -41,8 +42,6 @@ public class Member {
 
 
     //Getter
-
-
     public Long getId() {
         return id;
     }
@@ -67,5 +66,8 @@ public class Member {
         return likeMovies;
     }
 
+    public List<RecommendedMovie> getRecommendedMovies() {
+        return recommendedMovies;
+    }
 
 }
