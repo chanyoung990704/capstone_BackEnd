@@ -10,14 +10,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import unit.capstone.controller.dto.CreateMemberDTO;
-import unit.capstone.domain.Member;
-import unit.capstone.domain.MemberAuthority;
-import unit.capstone.domain.Movie;
+import unit.capstone.domain.*;
 import unit.capstone.service.MemberService;
 import unit.capstone.service.MovieService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,18 +46,34 @@ public class MemberApiController {
     }
 
     // 멤버 반환 DTO 사용해야
-    @GetMapping("/api/Members")
+    @GetMapping("/api/members")
     public List<Member> findMembers() {
         return memberService.findMembers();
+    }
+
+    //좋아요 영화 리스트
+    @GetMapping("/api/member/likemovie")
+    public List<Long> findLikeMovie(Authentication authentication) {
+        String email = authentication.getName();
+        Member member = memberService.findMemberByEmail(email).get();
+
+        return member.getLikeMovies().stream()
+                .map(likeMovie -> likeMovie.getMovie().getId())
+                .collect(Collectors.toList());
     }
 
 
 
     // 접근 권한 설정 (Test용)
-
     @GetMapping("/api/test")
     @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public String detailAuth(Authentication authentication) {
+        String email = authentication.getName();
+        Member member = memberService.findMemberByEmail(email).get();
+        List<LikeMovies> likeMovies = member.getLikeMovies();
+        for (LikeMovies likeMovie : likeMovies) {
+            System.out.println("likeMovie = " + likeMovie.getMovie().getId());
+        }
         System.out.println("authentication = " + authentication);
         System.out.println("authentication.getName() = " + authentication.getName());
         System.out.println("authentication = " + authentication.getAuthorities());
