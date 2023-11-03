@@ -23,10 +23,11 @@ public class LikeMovieRepositoryImpl implements LikeMovieRepositoryCustom{
     QLikeMovies likeMovies = QLikeMovies.likeMovies;
 
     // 이미 좋아요한 영화 리스트에 있는지
+    // tmdbId를 이용하여 서치
     @Override
-    public boolean isSavedLikeMovie(Long memberId, Long movieId) {
+    public boolean isSavedLikeMovie(Long memberId, Long tmdbId) {
         JPAQuery<LikeMovies> query = queryFactory.selectFrom(likeMovies)
-                .where(likeMovies.member.id.eq(memberId).and(likeMovies.movie.id.eq(movieId)));
+                .where(likeMovies.member.id.eq(memberId).and(likeMovies.movie.tmdbId.eq(tmdbId)));
 
         List<LikeMovies> result = query.fetch();
 

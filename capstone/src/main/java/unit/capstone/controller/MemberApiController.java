@@ -58,7 +58,7 @@ public class MemberApiController {
         Member member = memberService.findMemberByEmail(email).get();
 
         return member.getLikeMovies().stream()
-                .map(likeMovie -> likeMovie.getMovie().getId())
+                .map(likeMovie -> likeMovie.getMovie().getTmdbId())
                 .collect(Collectors.toList());
     }
 

@@ -22,7 +22,7 @@ public class JwtTokenService {
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(Instant.now())
-                .expiresAt(Instant.now().plusSeconds(60 * 15)) //토큰 만료 시간
+                .expiresAt(Instant.now().plusSeconds(30)) //토큰 만료 시간
                 .subject(authentication.getName())
                 .claim("scope", createScope(authentication))
                 .build();

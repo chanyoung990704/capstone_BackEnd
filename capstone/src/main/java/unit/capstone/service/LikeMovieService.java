@@ -22,18 +22,20 @@ public class LikeMovieService {
     private final LikeMovieRepository likeMovieRepository;
 
     // else문에서 caseCade 영속성 사용
-    public void movieLike(String email, Long movieId){
+    public void movieLike(String email, Long tmdbId){
         Member member = memberService.findMemberByEmail(email).get();
-        if(likeMovieRepository.isSavedLikeMovie(member.getId(), movieId))
+        if(likeMovieRepository.isSavedLikeMovie(member.getId(), tmdbId))
             throw new DuplicateLikedMovieException("이미 좋아요 등록된 영화입니다.");
         else {
-            Movie movie = movieService.findMovieById(movieId);
+            //Movie 엔티티의 PK값이 tmdbID가 아니기에 엔티티 연결을 위해 서치
+            Movie movie = movieService.findByTmdbId(tmdbId);
             new LikeMovies(member, movie);
         }
     }
 
-    public void cancelMovieLike(String email, Long movieId) {
+    public void cancelMovieLike(String email, Long tmdbId) {
         Member member = memberService.findMemberByEmail(email).get();
+        Long movieId = movieService.findByTmdbId(tmdbId).getId();
         Optional<LikeMovies> byMemberIdAndMovieId
                 = likeMovieRepository.findByMemberIdAndMovieId(member.getId(), movieId);
         if(!byMemberIdAndMovieId.isPresent())

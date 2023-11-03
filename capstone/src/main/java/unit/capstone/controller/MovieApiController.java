@@ -20,7 +20,7 @@ public class MovieApiController {
     // 임시 테스트용 나중에 필요하다면 ResponseEntity 타입으로 수정
     @GetMapping("/api/movie/{id}")
     public String findMovieById(@PathVariable Long id) {
-        Movie movieById = movieService.findMovieById(id);
+        Movie movieById = movieService.findByTmdbId(id);
         return movieById.getTitle();
     }
 

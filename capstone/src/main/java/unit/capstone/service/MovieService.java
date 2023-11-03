@@ -3,9 +3,6 @@ package unit.capstone.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import unit.capstone.domain.Movie;
@@ -24,9 +21,15 @@ public class MovieService {
 
     private final MovieRepository movieRepository;
 
+    //movieID(PK)를 이용한 엔티티 찾기
+    public Movie findById(Long movieId) {
+        return movieRepository.findById(movieId).get();
+    }
 
-    public Movie findMovieById(Long movieId) {
-        Optional<Movie> byId = movieRepository.findById(movieId);
+
+    //tmdb 영화 ID를 이용해 DB에 영화가 들어있는지 확인
+    public Movie findByTmdbId(Long tmdbId) {
+        Optional<Movie> byId = movieRepository.findByTmdbId(tmdbId);
         Movie movie = byId.orElseThrow(() -> new NotFoundMovieException("영화 ID 존재하지 않아요"));
         return movie;
     }

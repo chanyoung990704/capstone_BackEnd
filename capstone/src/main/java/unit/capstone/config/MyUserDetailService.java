@@ -24,8 +24,8 @@ public class MyUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Member> isMember = memberService.findMemberByEmail(username);
-        Member memberByEmail = isMember.orElseThrow(() -> new UsernameNotFoundException("없는 회원"));
+        Member memberByEmail = memberService.findMemberByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("해당 이메일의 회원이 없습니다: " + username));
 
         return User.builder()
                 .username(memberByEmail.getEmail())
@@ -33,4 +33,6 @@ public class MyUserDetailService implements UserDetailsService {
                 .authorities(memberByEmail.getAuthority().name())
                 .build();
     }
+
+
 }

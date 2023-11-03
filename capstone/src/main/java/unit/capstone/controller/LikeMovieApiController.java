@@ -20,12 +20,12 @@ public class LikeMovieApiController {
 
 
     // 영화 좋아요 눌렀을 시 작동
-    @PostMapping("/api/movie/like/{movieid}")
-    public ResponseEntity<String> movieLike(Authentication authentication, @PathVariable Long movieid) {
+    @PostMapping("/api/movie/like/{tmdbId}")
+    public ResponseEntity<String> movieLike(Authentication authentication, @PathVariable Long tmdbId) {
 
         try {
             String email = authentication.getName();
-            likeMovieService.movieLike(email, movieid);
+            likeMovieService.movieLike(email, tmdbId);
             return ResponseEntity.ok("좋아요 등록 완료");
         } catch (NotFoundMovieException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -39,11 +39,11 @@ public class LikeMovieApiController {
     }
 
     // 영화 좋아요 취소 기능
-    @PostMapping("/api/movie/likecancel/{movieid}")
-    public ResponseEntity<String> cancelMovieLike(Authentication authentication, @PathVariable Long movieid) {
+    @PostMapping("/api/movie/likecancel/{tmdbId}")
+    public ResponseEntity<String> cancelMovieLike(Authentication authentication, @PathVariable Long tmdbId) {
         try {
             String email = authentication.getName();
-            likeMovieService.cancelMovieLike(email, movieid);
+            likeMovieService.cancelMovieLike(email, tmdbId);
             return ResponseEntity.ok("좋아요 취소 완료");
         } catch (NotFoundMovieLikeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

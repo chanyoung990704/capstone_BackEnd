@@ -7,10 +7,13 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import unit.capstone.domain.Movie;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MovieRepository extends JpaRepository<Movie, Long>, PagingAndSortingRepository<Movie, Long> {
 
     List<Movie> findByTitleStartsWith(String prefix);
+
+    Optional<Movie> findByTmdbId(Long tmdbId);
 
     // extends 부분 PagingAndSortingRepository은 페이징 테스트 해보기 위해 추가함.
     // 삭제해도 무관. 쿼리가 검색 커리 + count쿼리 총 2개가 발생해 사용하지 않음.

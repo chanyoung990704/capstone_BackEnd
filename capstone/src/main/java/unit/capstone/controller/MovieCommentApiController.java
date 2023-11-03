@@ -26,13 +26,13 @@ public class MovieCommentApiController {
     private final MovieCommentService movieCommentService;
 
 
-    @PostMapping("/api/movie/comment/{movieId}")
-    public ResponseEntity<String> movieComment(Authentication authentication, @PathVariable Long movieId,
+    @PostMapping("/api/movie/comment/{tmdbId}")
+    public ResponseEntity<String> movieComment(Authentication authentication, @PathVariable Long tmdbId,
                                                @RequestBody String comment) {
         try {
             String email = authentication.getName();
             Member member = memberService.findMemberByEmail(email).get();
-            Movie movie = movieService.findMovieById(movieId);
+            Movie movie = movieService.findByTmdbId(tmdbId);
             LocalDateTime createDate = LocalDateTime.now();
 
             MovieComment movieComment = new MovieComment(comment, createDate, member, movie);

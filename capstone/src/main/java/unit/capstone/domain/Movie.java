@@ -1,20 +1,23 @@
 package unit.capstone.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tmdb")
 public class Movie {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "integer", name = "movie_id")
     private Long id;
 
+    @Column(columnDefinition = "integer", name = "tmdb_id")
+    private Long tmdbId;
+
     @Column(columnDefinition = "text")
     private String title;
+
+    @Column(columnDefinition = "text")
+    private String genres;
 
     // 생성자 통한 Setter 기능
     // 기본 생성자 protected 생성 방지
@@ -27,7 +30,15 @@ public class Movie {
         return id;
     }
 
+    public Long getTmdbId() {
+        return tmdbId;
+    }
+
     public String getTitle() {
         return title;
+    }
+
+    public String getGenres() {
+        return genres;
     }
 }
