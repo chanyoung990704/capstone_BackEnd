@@ -47,7 +47,7 @@ public class JwtAuthentication {
         http.authorizeHttpRequests(
                         auth -> auth.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                .requestMatchers("/authenticate","/api/register").permitAll()
+                                .requestMatchers("/authenticate","/api/register","/api/movie/comment/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -15,6 +15,7 @@ public class CapstoneApplication {
 		SpringApplication.run(CapstoneApplication.class, args);
 	}
 
+	//CORS문제를 해결하기 위한 Bean
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {

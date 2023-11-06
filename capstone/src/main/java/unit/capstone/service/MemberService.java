@@ -64,6 +64,7 @@ public class MemberService {
 
 
 
+    @Transactional(readOnly = true)
     private boolean isEmailTaken(String email) {
         return memberRepository.existsByEmail(email);
     }

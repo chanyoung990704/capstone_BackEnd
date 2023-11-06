@@ -26,16 +26,16 @@ public class MovieService {
         return movieRepository.findById(movieId).get();
     }
 
-
     //tmdb 영화 ID를 이용해 DB에 영화가 들어있는지 확인
+    @Transactional(readOnly = true)
     public Movie findByTmdbId(Long tmdbId) {
         Optional<Movie> byId = movieRepository.findByTmdbId(tmdbId);
         Movie movie = byId.orElseThrow(() -> new NotFoundMovieException("영화 ID 존재하지 않아요"));
         return movie;
     }
 
-
     // 검색어 자동 완성
+    @Transactional(readOnly = true)
     @Cacheable(value = "autoCompleteCache", key = "#prefix")
     public List<Movie> autoComplete(String prefix) {
         List<Movie> byTitleStartsWith = movieRepository.findByTitleStartsWith(prefix);

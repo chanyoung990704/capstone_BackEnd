@@ -62,4 +62,16 @@ public class MovieComment {
     public Movie getMovie() {
         return movie;
     }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public int getRating() {
+        return rating;
+    }
 }
