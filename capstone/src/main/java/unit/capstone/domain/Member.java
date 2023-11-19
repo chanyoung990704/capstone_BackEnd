@@ -8,7 +8,8 @@ import java.util.List;
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_seq_generator")
+    @SequenceGenerator(name = "member_seq_generator", sequenceName = "member_seq", allocationSize = 1)
     @Column(name = "member_id")
     private Long id;
 
@@ -24,7 +25,7 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<LikeMovies> likeMovies = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecommendedMovie> recommendedMovies = new ArrayList<>();
 
     // 생성자 통한 Setter 기능

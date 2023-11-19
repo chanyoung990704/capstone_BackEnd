@@ -21,7 +21,9 @@ public class CapstoneApplication {
 		return new WebMvcConfigurer() {
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOrigins("http://localhost:3000")
+						.allowedOrigins("http://localhost:3000", "http://localhost:5000",
+								"http://172.30.1.32:3000", "http://172.30.1.36:3000", "http://172.23.16.1:3000",
+								"http://172.23.16.1:3000/")
 						.allowedMethods("*")
 						.allowedHeaders("")
 						.allowedHeaders("Authorization", "Content-Type")

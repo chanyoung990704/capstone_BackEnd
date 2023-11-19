@@ -62,7 +62,16 @@ public class MemberApiController {
                 .collect(Collectors.toList());
     }
 
+    //추천된 영화 리스트
+    @GetMapping("/api/member/recommendedmovie")
+    public List<Long> findRecommendedMovie(Authentication authentication) {
+        String email = authentication.getName();
+        Member member = memberService.findMemberByEmail(email).get();
 
+        return member.getRecommendedMovies().stream()
+                .map(likeMovie -> likeMovie.getMovie().getTmdbId())
+                .collect(Collectors.toList());
+    }
 
     // 접근 권한 설정 (Test용)
     @GetMapping("/api/test")

@@ -63,9 +63,15 @@ public class MemberService {
     }
 
 
+    public void clearRecommendedMovies(String email){
+        Member member = findMemberByEmail(email).get();
+        member.getRecommendedMovies().clear();
+        memberRepository.save(member);
+    }
+
 
     @Transactional(readOnly = true)
-    private boolean isEmailTaken(String email) {
+    public boolean isEmailTaken(String email) {
         return memberRepository.existsByEmail(email);
     }
 
