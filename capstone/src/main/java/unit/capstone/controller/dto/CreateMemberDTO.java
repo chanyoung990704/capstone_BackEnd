@@ -10,14 +10,14 @@ public class CreateMemberDTO {
 
 
     @NotBlank(message = "이름 필수 입력")
-    @Size(min = 2, max = 10, message = "이름 2자 이상 10자 이하")
+    @Size(min = 2, max = 10, message = "Name length 2 ~ 10 !!!")
     private String name;
 
     @Email(message = "email 필수 입력")
     private String email;
 
     @NotBlank(message = "password 필수 입력")
-    @Size(min = 8, max = 20, message = "비밀번호 8자 이상 20자 이하")
+    @Size(min = 8, max = 20, message = "Password length 8 ~ 20 !!!")
     private String password;
 
 

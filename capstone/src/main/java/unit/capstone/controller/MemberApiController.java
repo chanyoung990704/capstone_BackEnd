@@ -14,6 +14,7 @@ import unit.capstone.domain.*;
 import unit.capstone.service.MemberService;
 import unit.capstone.service.MovieService;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,15 +31,17 @@ public class MemberApiController {
 
     // 회원가입
     @PostMapping("/api/register")
-    public ResponseEntity<String> registerMember(@RequestBody @Valid CreateMemberDTO createMemberDTO) {
+    public ResponseEntity<?> registerMember(@RequestBody @Valid CreateMemberDTO createMemberDTO) {
 
         try {
             Member member = new Member(createMemberDTO.getName(), passwordEncoder.encode(createMemberDTO.getPassword()),
                     createMemberDTO.getEmail(), MemberAuthority.ROLE_USER);
             memberService.registerMember(member);
             return ResponseEntity.ok("회원가입 완료");
+            // 중복된 이메일일 경우 registerMember()메서드에서 에러 검출
+            // 에러파일 이름 바꿔야 할 필요성
         } catch (UsernameNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(Collections.singletonMap("email", "This email already exists"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원가입 중 오류");
         }
