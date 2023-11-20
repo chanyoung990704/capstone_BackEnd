@@ -34,6 +34,11 @@ public class MovieService {
         return movie;
     }
 
+    @Transactional(readOnly = true)
+    public Optional<Movie> findByTmdbIdOptional(Long tmdbId) {
+        return movieRepository.findByTmdbId(tmdbId);
+    }
+
     // 검색어 자동 완성
     @Transactional(readOnly = true)
     @Cacheable(value = "autoCompleteCache", key = "#prefix")
