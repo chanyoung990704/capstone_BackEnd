@@ -59,7 +59,7 @@ public class MovieCommentApiController {
         // Movie 객체에 tmdbID와 movieID(PK) 지정되어있음
         Movie byTmdbId = movieService.findByTmdbId(tmdbId);
         List<MovieComment> comments = movieCommentService.getCommentByMovieId(byTmdbId.getId());
-        // stream 사용해 댓글 가져오디
+        // stream 사용해 댓글 가져오기
         List<String> collect = comments.stream()
                 .map(movieComment -> movieComment.getComment())
                 .collect(Collectors.toList());

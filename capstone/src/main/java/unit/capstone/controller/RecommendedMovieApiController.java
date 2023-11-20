@@ -42,8 +42,8 @@ public class RecommendedMovieApiController {
             List<Long> recommendedMovies = sendToFlask(requestFlask);
 
             // 사용자의 추천리스트 초기화 및 업데이트
-            recommendedMovieService.clearRecommendedMovieList(email);
-            recommendedMovieService.updateRecommendedMovies(email, recommendedMovies);
+            recommendedMovieService.clearRecommendedMovieList(member);
+            recommendedMovieService.updateRecommendedMovies(member, recommendedMovies);
 
             return ResponseEntity.ok("추천 영화 처리 완료");
         } catch (Exception e) {

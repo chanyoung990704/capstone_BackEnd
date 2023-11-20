@@ -20,8 +20,7 @@ public class RecommendedMovieService {
     private final MovieService movieService;
     private final RecommendedMovieRepository recommendedMovieRepository;
 
-    public void updateRecommendedMovies(String email, List<Long> tmdbIds) {
-        Member member = memberService.findMemberByEmail(email).get();
+    public void updateRecommendedMovies(Member member, List<Long> tmdbIds) {
 
         for (Long tmdbId : tmdbIds) {
             // Movie 엔티티의 PK값이 tmdbID가 아니기에 엔티티 연결을 위해 서치
@@ -36,8 +35,7 @@ public class RecommendedMovieService {
         }
     }
 
-    public void clearRecommendedMovieList(String email){
-        Member member = memberService.findMemberByEmail(email).get();
+    public void clearRecommendedMovieList(Member member){
         recommendedMovieRepository.clearAllMemberRecommendedMovie(member.getId());
     }
 
