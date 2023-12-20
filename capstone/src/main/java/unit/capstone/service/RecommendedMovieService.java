@@ -3,44 +3,30 @@ package unit.capstone.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import unit.capstone.domain.LikeMovies;
 import unit.capstone.domain.Member;
 import unit.capstone.domain.Movie;
 import unit.capstone.domain.RecommendedMovie;
-import unit.capstone.exception.movie.DuplicateLikedMovieException;
 import unit.capstone.repository.recommendedmovie.RecommendedMovieRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
+@Transactional
 public class RecommendedMovieService {
-    private final MemberService memberService;
     private final MovieService movieService;
     private final RecommendedMovieRepository recommendedMovieRepository;
 
     public void updateRecommendedMovies(Member member, List<Long> tmdbIds) {
-
         for (Long tmdbId : tmdbIds) {
-            // Movie 엔티티의 PK값이 tmdbID가 아니기에 엔티티 연결을 위해 서치
-            Optional<Movie> byTmdbIdOptional = movieService.findByTmdbIdOptional(tmdbId);
-            // 서버DB에 없는 영화는 제외
-            if(!byTmdbIdOptional.isPresent())
-                continue;
-            // 여기서 RecommendedMovie 객체를 생성하고, 필요한 처리를 수행합니다.
-            // 예: 데이터베이스에 저장, 연관 관계 설정 등
-            RecommendedMovie recommendedMovie = new RecommendedMovie(member, byTmdbIdOptional.get());
-
-            // 추천된 영화를 저장하거나 업데이트하는 로직
-            // 예: recommendedMovieService.save(recommendedMovie);
+            movieService.findByTmdbIdOptional(tmdbId).ifPresent(movie -> {
+                // cascade 상속이 되어있어 생성자만 생성해도 커밋 시 DB 업데이트
+                RecommendedMovie recommendedMovie = new RecommendedMovie(member, movie);
+            });
         }
     }
 
-    public void clearRecommendedMovieList(Member member){
+    public void clearRecommendedMovieList(Member member) {
         recommendedMovieRepository.clearAllMemberRecommendedMovie(member.getId());
     }
-
-
 }

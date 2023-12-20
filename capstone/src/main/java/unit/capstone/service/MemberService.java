@@ -1,42 +1,27 @@
 package unit.capstone.service;
 
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import unit.capstone.domain.LikeMovies;
 import unit.capstone.domain.Member;
-import unit.capstone.domain.Movie;
 import unit.capstone.exception.member.NotFoundMemberException;
-import unit.capstone.exception.movie.DuplicateLikedMovieException;
 import unit.capstone.repository.member.MemberRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public MemberService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
-
-
     public Long registerMember(Member member) {
-
-        //중복 이메일 검증 로직
-        if (isEmailTaken(member.getEmail())) {
-            throw new UsernameNotFoundException("This Email is Using....");
-        }
-
+        validateDuplicateEmail(member.getEmail());
         memberRepository.save(member);
         return member.getId();
-
     }
-
 
     @Transactional(readOnly = true)
     public List<Member> findMembers() {
@@ -45,9 +30,8 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public Member findMemberById(Long id) {
-        Optional<Member> isMember = memberRepository.findById(id);
-        Member member = isMember.orElseThrow(() -> new NotFoundMemberException("No MemberID!!!"));
-        return member;
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new NotFoundMemberException("Member not found with ID: " + id));
     }
 
     @Transactional(readOnly = true)
@@ -55,27 +39,23 @@ public class MemberService {
         return memberRepository.findMemberByEmail(email);
     }
 
-
     @Transactional(readOnly = true)
     public Member findMemberByUsername(String username) {
-        Optional<Member> isMember = memberRepository.findMemberByUsername(username);
-        Member member = isMember.orElseThrow(() -> new NotFoundMemberException("No Member Using this Username!!"));
-        return member;
+        return memberRepository.findMemberByUsername(username)
+                .orElseThrow(() -> new NotFoundMemberException("Member not found with username: " + username));
     }
 
-
-    public void clearRecommendedMovies(String email){
-        Member member = findMemberByEmail(email).get();
+    public void clearRecommendedMovies(String email) {
+        Member member = findMemberByEmail(email)
+                .orElseThrow(() -> new NotFoundMemberException("Member not found with email: " + email));
         member.getRecommendedMovies().clear();
         memberRepository.save(member);
     }
 
-
-    @Transactional(readOnly = true)
-    public boolean isEmailTaken(String email) {
-        return memberRepository.existsByEmail(email);
+    private void validateDuplicateEmail(String email) {
+        if (memberRepository.existsByEmail(email)) {
+            // 중복 이메일에 대한 예외 만들어아 햠
+            throw new NotFoundMemberException("Email already in use: " + email);
+        }
     }
-
-
-
 }

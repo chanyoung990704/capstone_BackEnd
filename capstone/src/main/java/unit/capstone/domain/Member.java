@@ -2,8 +2,6 @@ package unit.capstone.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +24,7 @@ public class Member {
     private MemberAuthority authority;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LikeMovies> likeMovies = new ArrayList<>();
+    private List<LikeMovie> likeMovies = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecommendedMovie> recommendedMovies = new ArrayList<>();

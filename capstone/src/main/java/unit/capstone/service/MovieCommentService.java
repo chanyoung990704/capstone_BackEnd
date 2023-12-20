@@ -17,7 +17,6 @@ import java.util.List;
 public class MovieCommentService {
 
     private final MovieCommentRepository movieCommentRepository;
-
     public void saveComment(MovieComment movieComment) {
         movieCommentRepository.save(movieComment);
     }
@@ -27,7 +26,6 @@ public class MovieCommentService {
     public List<MovieComment> getCommentByMovieId(Long movieId) {
         return movieCommentRepository.findByMovieId(movieId);
     }
-
 
     //댓글 10개 페이징 & 날짜 정렬
     @Transactional(readOnly = true)

@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
-public class LikeMovies {
+public class LikeMovie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,11 +22,11 @@ public class LikeMovies {
 
     // 생성자 통한 Setter 기능
     // 기본 생성자 protected 생성 방지
-    protected LikeMovies(){
+    protected LikeMovie(){
 
     }
 
-    public LikeMovies(Member member, Movie movie) {
+    public LikeMovie(Member member, Movie movie) {
         setMember(member);
         this.movie = movie;
     }

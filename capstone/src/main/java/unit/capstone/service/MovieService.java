@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MovieService {
 
-
     private final MovieRepository movieRepository;
 
     //movieID(PK)를 이용한 엔티티 찾기
@@ -51,7 +50,4 @@ public class MovieService {
 
         return first10Movies;
     }
-
-
-
 }

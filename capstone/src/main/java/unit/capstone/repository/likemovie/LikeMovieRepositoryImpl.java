@@ -4,8 +4,8 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
-import unit.capstone.domain.LikeMovies;
-import unit.capstone.domain.QLikeMovies;
+import unit.capstone.domain.LikeMovie;
+import unit.capstone.domain.QLikeMovie;
 
 import java.util.List;
 
@@ -20,15 +20,15 @@ public class LikeMovieRepositoryImpl implements LikeMovieRepositoryCustom{
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    QLikeMovies likeMovies = QLikeMovies.likeMovies;
+    QLikeMovie likeMovies = QLikeMovie.likeMovie;
 
     // 이미 좋아요한 영화 리스트에 있는지
     // tmdbId를 이용하여 서치
     @Override
     public boolean isSavedLikeMovie(Long memberId, Long tmdbId) {
-        JPAQuery<LikeMovies> query = queryFactory.selectFrom(likeMovies)
+        JPAQuery<LikeMovie> query = queryFactory.selectFrom(likeMovies)
                 .where(likeMovies.member.id.eq(memberId).and(likeMovies.movie.tmdbId.eq(tmdbId)));
-        List<LikeMovies> result = query.fetch();
+        List<LikeMovie> result = query.fetch();
 
         if(!result.isEmpty())
             return true;
