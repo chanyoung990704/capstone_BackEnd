@@ -14,7 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MovieApiController {
 
-
     private final MovieService movieService;
 
     // 임시 테스트용 나중에 필요하다면 ResponseEntity 타입으로 수정
@@ -23,7 +22,6 @@ public class MovieApiController {
         Movie movieById = movieService.findByTmdbId(id);
         return movieById.getTitle();
     }
-
 
     // 영화 제목 검색 자동완성을 위한 컨트롤러
     @GetMapping("/autocomplete/search")

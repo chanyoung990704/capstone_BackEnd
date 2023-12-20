@@ -8,18 +8,15 @@ import lombok.Data;
 @Data
 public class CreateMemberDTO {
 
-
-    @NotBlank(message = "이름 필수 입력")
-    @Size(min = 2, max = 10, message = "Name length 2 ~ 10 !!!")
+    @NotBlank(message = "{name.required}")
+    @Size(min = 2, max = 10, message = "{name.size}")
     private String name;
 
-    @Email(message = "email 필수 입력")
+    @Email(message = "{email.required}")
     private String email;
 
-    @NotBlank(message = "password 필수 입력")
-    @Size(min = 8, max = 20, message = "Password length 8 ~ 20 !!!")
+    @NotBlank(message = "{password.required}")
+    @Size(min = 8, max = 20, message = "{password.size}")
     private String password;
-
-
 
 }

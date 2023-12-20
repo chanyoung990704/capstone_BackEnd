@@ -35,31 +35,32 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
 import java.util.UUID;
 
-
 @Configuration
-@EnableMethodSecurity()
+@EnableMethodSecurity
 public class JwtAuthentication {
+    private static final String KEY_GENERATION_ALG = "RSA";
+    private static final int KEY_SIZE = 2048;
+    private static final String ISSUER = "self";
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(
-                        auth -> auth.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                .requestMatchers("/authenticate", "/api/register", "/api/movie/comment/**").permitAll()
-                                .anyRequest().authenticated()
-                )
+        http.authorizeHttpRequests(auth -> {
+                    auth.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
+                            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                            .requestMatchers("/authenticate", "/api/register", "/api/movie/comment/**").permitAll()
+                            .anyRequest().authenticated();
+                })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(HttpBasicConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
-                .cors(Customizer.withDefaults()); // 추가된 CORS 설정
+                .cors(Customizer.withDefaults());
 
         return http.build();
     }
@@ -67,7 +68,7 @@ public class JwtAuthentication {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://59.9.96.205:3000")); // 프론트엔드 서버 주소
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://59.9.96.205:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
@@ -77,24 +78,21 @@ public class JwtAuthentication {
         return source;
     }
 
-
     @Bean
     public JwtDecoder jwtDecoder(RSAKey rsaKey) throws JOSEException {
         NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withPublicKey(rsaKey.toRSAPublicKey())
                 .build();
-        jwtDecoder.setJwtValidator(JwtValidators.createDefaultWithIssuer("self"));
+        jwtDecoder.setJwtValidator(JwtValidators.createDefaultWithIssuer(ISSUER));
 
         return jwtDecoder;
     }
 
-
     @Bean
     public KeyPair keyPair() throws NoSuchAlgorithmException {
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        keyPairGenerator.initialize(2048);
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(KEY_GENERATION_ALG);
+        keyPairGenerator.initialize(KEY_SIZE);
         return keyPairGenerator.generateKeyPair();
     }
-
 
     @Bean
     public RSAKey rsaKey(KeyPair keyPair) {
@@ -107,33 +105,19 @@ public class JwtAuthentication {
     @Bean
     public JWKSource<SecurityContext> jwkSource(RSAKey rsaKey) {
         JWKSet jwkSet = new JWKSet(rsaKey);
-//        JWKSource jwkSource = new JWKSource() {
-//
-//            @Override
-//            public List<JWK> get(JWKSelector jwkSelector, SecurityContext context) throws KeySourceException {
-//                return jwkSelector.select(jwkSet);
-//            }
-//        };
-//
-//        return jwkSource;
-        return ((jwkSelector, context) -> jwkSelector.select(jwkSet));
+        return (jwkSelector, context) -> jwkSelector.select(jwkSet);
     }
-
 
     @Bean
     public JwtEncoder jwtEncoder(JWKSource<SecurityContext> jwkSource) {
         return new NimbusJwtEncoder(jwkSource);
     }
 
-
     @Bean
-    public AuthenticationManager authenticationManager(
-            UserDetailsService userDetailsService) {
-        var authenticationProvider = new DaoAuthenticationProvider();
+    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return new ProviderManager(authenticationProvider);
     }
-
-
 }

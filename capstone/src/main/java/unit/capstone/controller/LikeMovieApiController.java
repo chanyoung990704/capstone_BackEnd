@@ -14,6 +14,8 @@ import unit.capstone.exception.movie.NotFoundMovieLikeException;
 import unit.capstone.service.LikeMovieService;
 import unit.capstone.service.MemberService;
 
+import java.util.Optional;
+
 @RestController
 @RequiredArgsConstructor
 public class LikeMovieApiController {
@@ -21,42 +23,33 @@ public class LikeMovieApiController {
     private final LikeMovieService likeMovieService;
     private final MemberService memberService;
 
-
-    // 영화 좋아요 눌렀을 시 작동
     @PostMapping("/api/movie/like/{tmdbId}")
     public ResponseEntity<String> movieLike(Authentication authentication, @PathVariable Long tmdbId) {
-
-        try {
-            String email = authentication.getName();
-            Member member = memberService.findMemberByEmail(email).get();
-
-            likeMovieService.movieLike(member, tmdbId);
-            return ResponseEntity.ok("좋아요 등록 완료");
-        } catch (NotFoundMovieException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (DuplicateLikedMovieException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-        catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
-
+        return processLikeOperation(authentication, tmdbId, true);
     }
 
-    // 영화 좋아요 취소 기능
     @PostMapping("/api/movie/likecancel/{tmdbId}")
     public ResponseEntity<String> cancelMovieLike(Authentication authentication, @PathVariable Long tmdbId) {
-        try {
-            String email = authentication.getName();
-            Member member = memberService.findMemberByEmail(email).get();
-
-            likeMovieService.cancelMovieLike(member, tmdbId);
-            return ResponseEntity.ok("좋아요 취소 완료");
-        } catch (NotFoundMovieLikeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 문제로 좋아요 취소가 되지 않았습니다.");
-        }
+        return processLikeOperation(authentication, tmdbId, false);
     }
 
+    private ResponseEntity<String> processLikeOperation(Authentication authentication, Long tmdbId, boolean isLike) {
+        try {
+            String email = authentication.getName();
+            Member member = memberService.findMemberByEmail(email)
+                    .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+            if (isLike) {
+                likeMovieService.movieLike(member, tmdbId);
+                return ResponseEntity.ok("좋아요 등록 완료");
+            } else {
+                likeMovieService.cancelMovieLike(member, tmdbId);
+                return ResponseEntity.ok("좋아요 취소 완료");
+            }
+        } catch (NotFoundMovieException | NotFoundMovieLikeException | DuplicateLikedMovieException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류로 요청을 처리할 수 없습니다.");
+        }
+    }
 }

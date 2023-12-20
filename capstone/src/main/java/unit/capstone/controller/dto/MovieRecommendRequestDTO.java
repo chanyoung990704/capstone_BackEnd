@@ -6,7 +6,6 @@ import java.util.List;
 
 @Data
 public class MovieRecommendRequestDTO {
-
     private String selectionType;
     private List<String> genres;
     private String director;

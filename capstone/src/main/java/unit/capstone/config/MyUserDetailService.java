@@ -1,6 +1,6 @@
 package unit.capstone.config;
 
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,23 +9,16 @@ import org.springframework.stereotype.Component;
 import unit.capstone.domain.Member;
 import unit.capstone.service.MemberService;
 
-import java.util.Optional;
-
 @Component
+@RequiredArgsConstructor
 public class MyUserDetailService implements UserDetailsService {
 
     private final MemberService memberService;
 
-
-    public MyUserDetailService(MemberService memberService) {
-        this.memberService = memberService;
-    }
-
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member memberByEmail = memberService.findMemberByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("해당 이메일의 회원이 없습니다: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
 
         return User.builder()
                 .username(memberByEmail.getEmail())
@@ -33,6 +26,4 @@ public class MyUserDetailService implements UserDetailsService {
                 .authorities(memberByEmail.getAuthority().name())
                 .build();
     }
-
-
 }

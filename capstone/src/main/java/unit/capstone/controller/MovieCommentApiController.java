@@ -38,19 +38,14 @@ public class MovieCommentApiController {
             Member member = memberService.findMemberByEmail(email).get();
             Movie movie = movieService.findByTmdbId(tmdbId);
             LocalDateTime createDate = LocalDateTime.now();
-
             // Rating이 필요하지 않은 생성자 사용
             MovieComment movieComment = new MovieComment(comment, createDate, member, movie);
             movieCommentService.saveComment(movieComment);
-
             return ResponseEntity.ok("댓글 등록 완료");
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 문제로 댓글 등록 실패");
         }
-
-
     }
 
     //댓글 가져오기 초기 버젼이라 쓰지 않습니다.
@@ -80,7 +75,6 @@ public class MovieCommentApiController {
         Page<MovieComment> movieCommentByPagingDateAsc = movieCommentService
                 .getMovieCommentByPagingDateAsc(movieId, pageable);
 
-
         List<String> comments = movieCommentByPagingDateAsc.getContent()
                 .stream()
                 .map(MovieComment::getComment)
@@ -92,8 +86,5 @@ public class MovieCommentApiController {
             MovieCommentDTO movieCommentDTO = new MovieCommentDTO(comments, movieCommentByPagingDateAsc.getTotalPages());
             return ResponseEntity.ok(movieCommentDTO);
         }
-
     }
-
-
 }
