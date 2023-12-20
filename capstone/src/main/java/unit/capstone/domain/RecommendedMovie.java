@@ -1,8 +1,10 @@
 package unit.capstone.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
+@Getter
 public class RecommendedMovie {
 
     @Id
@@ -34,18 +36,5 @@ public class RecommendedMovie {
     public void setMember(Member member) {
         this.member = member;
         member.getRecommendedMovies().add(this);
-    }
-
-    //Getter
-    public Long getId() {
-        return id;
-    }
-
-    public Member getMember() {
-        return member;
-    }
-
-    public Movie getMovie() {
-        return movie;
     }
 }

@@ -28,14 +28,11 @@ public class LikeMovieRepositoryImpl implements LikeMovieRepositoryCustom{
     public boolean isSavedLikeMovie(Long memberId, Long tmdbId) {
         JPAQuery<LikeMovies> query = queryFactory.selectFrom(likeMovies)
                 .where(likeMovies.member.id.eq(memberId).and(likeMovies.movie.tmdbId.eq(tmdbId)));
-
         List<LikeMovies> result = query.fetch();
 
         if(!result.isEmpty())
             return true;
         else
             return false;
-
-
     }
 }

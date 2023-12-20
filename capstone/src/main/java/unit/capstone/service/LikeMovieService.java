@@ -40,7 +40,7 @@ public class LikeMovieService {
             throw new NotFoundMovieLikeException("좋아요 표시가 되지 않은 영화입니다.");
         else{
             LikeMovies likeMovies = byMemberIdAndMovieId.get();
-            likeMovies.removeMember(member);
+            likeMovies.removeMember();
             likeMovieRepository.deleteByMemberIdAndMovieId(member.getId(), movieId);
         }
 

@@ -12,7 +12,6 @@ import java.util.Optional;
 public interface MovieRepository extends JpaRepository<Movie, Long>, PagingAndSortingRepository<Movie, Long> {
 
     List<Movie> findByTitleStartsWith(String prefix);
-
     Optional<Movie> findByTmdbId(Long tmdbId);
 
     // extends 부분 PagingAndSortingRepository은 페이징 테스트 해보기 위해 추가함.

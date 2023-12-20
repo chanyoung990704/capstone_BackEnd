@@ -1,10 +1,15 @@
 package unit.capstone.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
 public class Member {
 
     @Id
@@ -14,15 +19,13 @@ public class Member {
     private Long id;
 
     private String username;
-
     private String email;
-
     private String password;
 
     @Enumerated(EnumType.STRING)
     private MemberAuthority authority;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LikeMovies> likeMovies = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -40,35 +43,4 @@ public class Member {
         this.email = email;
         this.authority = authority;
     }
-
-
-    //Getter
-    public Long getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public MemberAuthority getAuthority() {
-        return authority;
-    }
-
-    public List<LikeMovies> getLikeMovies() {
-        return likeMovies;
-    }
-
-    public List<RecommendedMovie> getRecommendedMovies() {
-        return recommendedMovies;
-    }
-
 }

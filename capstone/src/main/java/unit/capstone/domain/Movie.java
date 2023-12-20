@@ -1,8 +1,10 @@
 package unit.capstone.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
+@Getter
 public class Movie {
 
     @Id
@@ -23,22 +25,5 @@ public class Movie {
     // 기본 생성자 protected 생성 방지
     protected Movie() {
 
-    }
-
-    //Getter
-    public Long getId() {
-        return id;
-    }
-
-    public Long getTmdbId() {
-        return tmdbId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getGenres() {
-        return genres;
     }
 }

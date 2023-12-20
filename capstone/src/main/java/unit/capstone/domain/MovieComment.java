@@ -1,10 +1,12 @@
 package unit.capstone.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
 public class MovieComment {
 
     @Id
@@ -27,11 +29,11 @@ public class MovieComment {
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
-
+    // 생성자 통한 Setter 기능
+    // 기본 생성자 protected 생성 방지
     protected MovieComment() {
 
     }
-
 
     //rating이 입력되지 않은 경우의 생성자
     public MovieComment(String comment, LocalDateTime createDate, Member member, Movie movie) {
@@ -48,30 +50,5 @@ public class MovieComment {
         this.rating = rating;
         this.member = member;
         this.movie = movie;
-    }
-
-    //Getter
-    public Long getId() {
-        return id;
-    }
-
-    public Member getMember() {
-        return member;
-    }
-
-    public Movie getMovie() {
-        return movie;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public int getRating() {
-        return rating;
     }
 }

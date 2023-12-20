@@ -11,7 +11,6 @@ import java.util.List;
 public interface MovieCommentRepository extends JpaRepository<MovieComment, Long> {
 
     List<MovieComment> findByMovieId(Long movieId);
-
     Page<MovieComment> findAllByMovieIdOrderByCreateDateAsc(@Param("movieId") Long movieId, Pageable pageable);
 
 }

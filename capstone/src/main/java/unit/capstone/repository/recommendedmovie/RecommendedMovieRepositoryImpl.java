@@ -16,7 +16,6 @@ public class RecommendedMovieRepositoryImpl implements RecommendedMovieRepositor
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-
     @Override
     public void clearAllMemberRecommendedMovie(Long memberId) {
         QRecommendedMovie recommendedMovie = QRecommendedMovie.recommendedMovie;

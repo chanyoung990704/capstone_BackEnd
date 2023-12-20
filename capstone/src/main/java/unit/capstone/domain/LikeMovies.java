@@ -1,8 +1,10 @@
 package unit.capstone.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
+@Getter
 public class LikeMovies {
 
     @Id
@@ -10,11 +12,9 @@ public class LikeMovies {
     @Column(name = "like_movie_id")
     private Long id;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
@@ -31,28 +31,18 @@ public class LikeMovies {
         this.movie = movie;
     }
 
-
-
-    //연관관계 세팅
+    // 엔티티 연관관계 설정
     public void setMember(Member member) {
         this.member = member;
-        member.getLikeMovies().add(this);
-    }
-    public void removeMember(Member member) {
-        member.getLikeMovies().remove(this);
-    }
-
-    //Getter
-    public Long getId() {
-        return id;
+        if(!member.getLikeMovies().contains(this)) {
+            member.getLikeMovies().add(this);
+        }
     }
 
-    public Member getMember() {
-        return member;
+    public void removeMember() {
+        if(this.member != null) {
+            this.member.getLikeMovies().remove(this);
+        }
+        this.member = null;
     }
-
-    public Movie getMovie() {
-        return movie;
-    }
-
 }
