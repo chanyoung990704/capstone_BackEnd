@@ -152,23 +152,34 @@ Member                Movie
 
 </details>
 
-## 사용 엔드포인트
-- **JwtAuthenticationResource.java**
-  - `@PostMapping("/authenticate")`: 사용자 인증 및 JWT 토큰 생성
-- **MemberApiController.java**
-  - `@PostMapping("/api/register")`: 사용자 회원가입
-  - `@GetMapping("/api/members")`: 모든 회원 정보 조회
-  - `@GetMapping("/api/member/likemovie")`: 인증된 사용자의 '좋아요' 한 영화 목록 조회
-  - `@GetMapping("/api/member/recommendedmovie")`: 인증된 사용자에게 추천된 영화 목록 조회
-  - `@GetMapping("/api/test")`: 관리자 권한 체크
-- **MovieApiController.java**
-  - `@GetMapping("/api/movie/{id}")`: 특정 ID 영화 정보 조회
-  - `@GetMapping("/autocomplete/search")`: 영화 제목 자동완성 검색
-- **LikeMovieApiController.java**
-  - `@PostMapping("/api/movie/like/{tmdbId}")`: 영화 '좋아요' 등록
-  - `@PostMapping("/api/movie/likecancel/{tmdbId}")`: 영화 '좋아요' 취소
-- **RecommendedMovieApiController.java**
-  - `@PostMapping("/api/movie/recommend")`: 맞춤 영화 추천 제공
+## API Endpoints
+
+### Authentication
+- POST `/api/authenticate` - 사용자 인증 및 JWT 토큰 생성
+
+### Member Management
+- POST `/api/members` - 사용자 회원가입
+- GET `/api/members` - 모든 회원 정보 조회
+- GET `/api/members/likes/movies` - 사용자의 '좋아요' 한 영화 목록 조회
+- GET `/api/members/recommendations/movies` - 사용자에게 추천된 영화 목록 조회
+- GET `/api/admin/check` - 관리자 권한 체크
+
+### Movie Information
+- GET `/api/movies/{id}` - 특정 ID 영화 정보 조회
+- GET `/api/movies/search/autocomplete` - 영화 제목 자동완성 검색
+
+### Movie Likes
+- POST `/api/movies/{tmdbId}/likes` - 영화 '좋아요' 등록
+- DELETE `/api/movies/{tmdbId}/likes` - 영화 '좋아요' 취소
+
+### Movie Recommendations
+- POST `/api/movies/recommendations` - 맞춤 영화 추천 제공
+
+### Movie Comment
+- POST `/api/movie/{tmdbId}/comments` - 특정 ID 영화 페이지에 댓글 작성
+- GET `/api/movie/{tmdbId}/comments` - 특정 ID 영화 페이지에 작성된 댓글 조회
+
+
 
 ## 로그인 및 인증 시스템
 - **Spring Security와 JWT를 통한 인증 및 보안 메커니즘 구현**
@@ -184,3 +195,5 @@ Member                Movie
 - 초기 설계 시 DB 및 도메인 구조에 대한 확장성을 고려하지 못함. 향후 리팩토링을 통해 이를 개선할 필요가 있음.
 - TMDb API와 DB 내 영화 ID 간의 일치성 문제 해결이 필요함.
 - CascadeType 사용에 대한 명시적인 규정과 주의가 필요함.
+- AWS를 사용한 빌드가 필요할 경우 빌드를 해야 함.
+- CI/CD를 사용해 푸시후 자동 테스팅 & 빌드가 되게 해야 함.
