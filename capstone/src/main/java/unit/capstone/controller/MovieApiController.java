@@ -17,14 +17,14 @@ public class MovieApiController {
     private final MovieService movieService;
 
     // 임시 테스트용 나중에 필요하다면 ResponseEntity 타입으로 수정
-    @GetMapping("/api/movie/{id}")
+    @GetMapping("/api/movies/{id}")
     public String findMovieById(@PathVariable Long id) {
         Movie movieById = movieService.findByTmdbId(id);
         return movieById.getTitle();
     }
 
     // 영화 제목 검색 자동완성을 위한 컨트롤러
-    @GetMapping("/autocomplete/search")
+    @GetMapping("/api/movies/search/autocomplete")
     public List<Movie> autoCompleteSearch(@RequestParam String prefix) {
         return movieService.autoComplete(prefix);
     }

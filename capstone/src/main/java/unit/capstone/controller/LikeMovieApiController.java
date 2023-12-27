@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,12 +24,12 @@ public class LikeMovieApiController {
     private final LikeMovieService likeMovieService;
     private final MemberService memberService;
 
-    @PostMapping("/api/movie/like/{tmdbId}")
+    @PostMapping("/api/movies/{tmdbId}/likes")
     public ResponseEntity<String> movieLike(Authentication authentication, @PathVariable Long tmdbId) {
         return processLikeOperation(authentication, tmdbId, true);
     }
 
-    @PostMapping("/api/movie/likecancel/{tmdbId}")
+    @DeleteMapping("/api/movies/{tmdbId}/likes")
     public ResponseEntity<String> cancelMovieLike(Authentication authentication, @PathVariable Long tmdbId) {
         return processLikeOperation(authentication, tmdbId, false);
     }

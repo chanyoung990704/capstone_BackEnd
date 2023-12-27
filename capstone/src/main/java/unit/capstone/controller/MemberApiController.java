@@ -26,7 +26,7 @@ public class MemberApiController {
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
 
-    @PostMapping("/api/register")
+    @PostMapping("/api/members")
     public ResponseEntity<?> registerMember(@RequestBody @Valid CreateMemberDTO createMemberDTO) {
         try {
             Member member = new Member(createMemberDTO.getName(),
@@ -51,7 +51,7 @@ public class MemberApiController {
         return ResponseEntity.ok(members);
     }
 
-    @GetMapping("/api/member/likemovie")
+    @GetMapping("/api/members/likes/movies")
     public ResponseEntity<List<Long>> findLikeMovie(Authentication authentication) {
         return memberService.findMemberByEmail(authentication.getName())
                 .map(member -> member.getLikeMovies().stream()
@@ -61,7 +61,7 @@ public class MemberApiController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @GetMapping("/api/member/recommendedmovie")
+    @GetMapping("/api/members/recommendations/movies")
     public ResponseEntity<List<Long>> findRecommendedMovie(Authentication authentication) {
         return memberService.findMemberByEmail(authentication.getName())
                 .map(member -> member.getRecommendedMovies().stream()
@@ -72,7 +72,7 @@ public class MemberApiController {
     }
 
     // 특정 권한별 컨트롤러 작동하는지 테스트하는 메서드
-    @GetMapping("/api/test")
+    @GetMapping("/api/admin/test")
     @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public ResponseEntity<String> detailAuth(Authentication authentication) {
         return ResponseEntity.ok("관리자 접근 승인: " + authentication.getName());

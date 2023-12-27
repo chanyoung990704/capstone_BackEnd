@@ -29,7 +29,7 @@ public class MovieCommentApiController {
     private final MovieCommentService movieCommentService;
 
     //댓글 작성 
-    @PostMapping("/api/movie/comment/{tmdbId}")
+    @PostMapping("/api/movie/{tmdbId}/comments")
     public ResponseEntity<String> saveComment(Authentication authentication, @PathVariable Long tmdbId,
                                                @RequestBody String comment) {
         try {
@@ -66,7 +66,7 @@ public class MovieCommentApiController {
 
 
     //페이징 댓글 가져오기
-    @GetMapping("/api/movie/comment/{tmdbId}")
+    @GetMapping("/api/movie/{tmdbId}/comments")
     public ResponseEntity<MovieCommentDTO> listCommentsByMovie(@PathVariable Long tmdbId,
                                                   @RequestParam(defaultValue = "0") int page,
                                                   @RequestParam(defaultValue = "10") int size) {
