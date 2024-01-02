@@ -14,18 +14,4 @@ public class CapstoneApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CapstoneApplication.class, args);
 	}
-
-	//CORS문제를 해결하기 위한 Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-						.allowedOrigins("http://59.9.96.205:3000", "http://localhost:3000", "http://localhost:5000")
-						.allowedMethods("*")
-						.allowedHeaders("Authorization", "Content-Type")
-						.exposedHeaders("Authorization")
-						.allowCredentials(true);
-			}
-		};
-	}
 }

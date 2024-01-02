@@ -30,7 +30,7 @@ public class RecommendedMovieApiController {
     private final MemberService memberService;
 
     // 추천페이지에서 양식 받아옴
-    @PostMapping("/api/movie/recommendations")
+    @PostMapping("/api/movies/recommendations")
     public ResponseEntity<?> recommendMovies(Authentication authentication, @RequestBody MovieRecommendRequestDTO request) {
         try {
             // 사용자 정보 가져오기
