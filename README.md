@@ -176,8 +176,8 @@ Member                Movie
 - POST `/api/movies/recommendations` - 맞춤 영화 추천 제공
 
 ### Movie Comment
-- POST `/api/movie/{tmdbId}/comments` - 특정 ID 영화 페이지에 댓글 작성
-- GET `/api/movie/{tmdbId}/comments` - 특정 ID 영화 페이지에 작성된 댓글 조회
+- POST `/api/movies/{tmdbId}/comments` - 특정 ID 영화 페이지에 댓글 작성
+- GET `/api/movies/{tmdbId}/comments` - 특정 ID 영화 페이지에 작성된 댓글 조회
 
 
 
