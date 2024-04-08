@@ -64,6 +64,11 @@ jobs:
     - name: Check AWS CLI version
       run: aws --version
 
+    - name: Export docker image
+      run: docker save chanyoungpark9974/urmovie_back:latest > urmovie_back.tar
+    
+    - name: Upload image to S3
+      run: aws s3 cp urmovie_back.tar s3://urmovie-bucket/urmovie_back.tar
 
 
     
