@@ -6,6 +6,13 @@ cd /home/ubuntu/deploy/
 IMAGE_TAR="urmovie_back.tar"
 CONTAINER_NAME="urmovie_backend"
 
+# 기존에 실행 중인 같은 이름의 컨테이너가 있으면 중지하고 삭제
+if [ $(sudo docker ps -aq -f name=^${CONTAINER_NAME}$) ]; then
+    echo "Stopping and removing existing container..."
+    sudo docker stop $CONTAINER_NAME > /dev/null 2>&1
+    sudo docker rm $CONTAINER_NAME > /dev/null 2>&1
+fi
+
 # .tar 파일로부터 Docker 이미지 로드
 sudo docker load -i $IMAGE_TAR > /dev/null 2>&1
 
