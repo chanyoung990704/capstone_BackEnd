@@ -59,20 +59,31 @@ jobs:
       with: 
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
         aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
-        aws-region: ap-northeast-2
+        aws-region: us-east-2
 
-    - name: Check AWS CLI version
-      run: aws --version
+    - name: Copy deploy files
+      run: |
+        cd capstone
+        mkdir deploy
+        cp deploy.sh appspec.yml deploy/
 
     - name: Export docker image
-      run: docker save chanyoungpark9974/urmovie_back:latest > urmovie_back.tar
-    
-    - name: Upload image to S3
-      run: aws s3 cp urmovie_back.tar s3://urmovie-bucket/urmovie_back.tar
+      run: docker save chanyoungpark9974/urmovie_back:latest > capstone/deploy/urmovie_back.tar
 
+    - name: Upload files to deploy.zip
+      run: |
+        cd capstone/deploy
+        zip urmovie_backend.zip urmovie_back.tar deploy.sh appspec.yml
+        aws s3 cp urmovie_backend.zip s3://urmovie-buckets/deploy/
 
-    
-
-
-
-
+    - name: Trigger deployment to CodeDeploy
+      run: |
+          aws deploy create-deployment \
+            --application-name urmovie-backend-deploy \
+            --deployment-group-name spring-deploy-group \
+            --deployment-config-name CodeDeployDefault.AllAtOnce \
+            --description "Deployment from GitHub" \
+            --region us-east-2 \
+            --s3-location bucket=urmovie-buckets,key=deploy/urmovie_backend.zip,bundleType=zip
+      
+      
