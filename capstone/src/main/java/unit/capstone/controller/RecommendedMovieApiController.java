@@ -54,7 +54,7 @@ public class RecommendedMovieApiController {
     }
 
     private List<Long> sendToFlask(MovieRecommendedFlaskDTO dto) throws JsonProcessingException {
-        String flaskUrl = "http://localhost:5000/recommend"; // Flask 서버 URL
+        String flaskUrl = "http://3.18.110.67:5000/recommend"; // Flask 서버 URL
 
         // JSON으로 변환
         ObjectMapper objectMapper = new ObjectMapper();
