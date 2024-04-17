@@ -68,7 +68,7 @@ public class JwtAuthentication {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://3.18.110.67:3000", "http://172.31.47.11:3000"));
+        configuration.setAllowedOrigins(Arrays.asList("http://18.221.102.96:3000", "http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
